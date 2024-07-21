@@ -1,3 +1,6 @@
+/// using module that avoid from naming conflict and order of our code in html doesnt matter
+import { cart } from '../data/cart.js'
+
 let productsHTML = '';
 
 products.forEach((product) => {
