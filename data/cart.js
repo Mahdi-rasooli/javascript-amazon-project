@@ -1,4 +1,5 @@
 export let cart = JSON.parse(localStorage.getItem('cart'));
+
 if (!cart) {
   cart = [{
   productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
@@ -69,5 +70,21 @@ export function calculateCartQuantity() {
   });
 
   return cartQuantity;
+};
+
+export function updateDeliveryOption(productId , deliveryOptionId){
+
+  let matchingItem;
+
+  cart.forEach((item) => {
+    if (productId === item.productId) {
+      matchingItem = item;
+    }
+  });
+
+
+  matchingItem.deliveryOptionId = deliveryOptionId;
+
+  saveToStorage();
 };
 

@@ -1,5 +1,5 @@
 
-import { cart, removeFromCart } from '../data/cart.js';
+import { cart, removeFromCart , updateDeliveryOption } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 import { calculateCartQuantity } from '../data/cart.js';
@@ -28,22 +28,17 @@ cart.forEach((item) => {
 
   let deliveryOption;
 
-  deliveryOptions.forEach((option) => {
-    if (option.id === deliveryOptionId) {
-      deliveryOption = option;
-    };
+  deliveryOptions.forEach((Option) => {
+    if(Option.id === deliveryOptionId){
+      deliveryOption = Option;
+    }
   });
 
-  if (!deliveryOption) {
-    console.error(`No delivery option found for id ${deliveryOptionId}`);
-    return; // Skip this item if deliveryOption is not found
-  }
-
-  const today = dayjs();
-  const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
+  const day = dayjs();
+  const deliveryDate = day.add(deliveryOption.deliveryDays, 'days');
   const dateString = deliveryDate.format('dddd, MMMM D');
 
-
+  
   cartSummaryHTML += `
           <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
             <div class="delivery-date">
@@ -103,7 +98,9 @@ function deliveryOptionHTML(matchingProduct, item) {
     const isChecked = deliveryOption.id === item.deliveryOptionId;
 
     html += `
-    <div class="delivery-option">
+    <div class="delivery-option js-delivery-option"
+                data-product-id="${matchingProduct.id}"
+                data-delivery-option-id="${deliveryOption.id}">
          <input type="radio"
                 ${isChecked ? 'checked' : ''}
                 class="delivery-option-input"
@@ -122,6 +119,15 @@ function deliveryOptionHTML(matchingProduct, item) {
 
   return html;
 };
+
+
+document.querySelectorAll('.js-delivery-option').forEach((element) => {
+  element.addEventListener('click' , () => {
+    
+    const {productId , deliveryOptionId} = element.dataset;
+    updateDeliveryOption(productId , deliveryOptionId);
+  });
+});
 
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
