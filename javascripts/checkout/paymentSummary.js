@@ -21,13 +21,16 @@ export function renderPaymentSummary() {
     const taxCents = totalBeforeTaxCents * 0.1;
     const totalCents = totalBeforeTaxCents + taxCents;
 
+
+    const cartQuantity = calculateCartQuantity();
+
     const paymentSummaryHTML = `
           <div class="payment-summary-title">
             Order Summary
           </div>
 
           <div class="payment-summary-row">
-            <div>Items (3):</div>
+            <div>items (${cartQuantity}) :</div>
             <div class="payment-summary-money">
                $${formatCurrency(productPriceCents)}
             </div>
