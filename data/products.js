@@ -1,15 +1,15 @@
 import { formatCurrency } from '../javascripts/utils/money.js'
 
 
-export function getProduct(productId){
+export function getProduct(productId) {
   let matchingProduct;
 
-    products.forEach((product) => {
-      if (product.id === productId) {
-        matchingProduct = product;
-      }
-    });
-    return matchingProduct
+  products.forEach((product) => {
+    if (product.id === productId) {
+      matchingProduct = product;
+    }
+  });
+  return matchingProduct
 };
 
 
@@ -17,7 +17,7 @@ export function getProduct(productId){
 
 
 
-class product{
+class Product {
   id;
   image;
   name;
@@ -25,7 +25,7 @@ class product{
   priceCents;
 
 
-  constructor(productsDetals){
+  constructor(productsDetals) {
     this.id = productsDetals.id;
     this.image = productsDetals.image;
     this.name = productsDetals.name;
@@ -34,16 +34,61 @@ class product{
   }
 
 
-  getStarsUrl(){
+  getStarsUrl() {
     return `images/ratings/rating-${this.rating.stars * 10}.png`;
   }
 
-  getPrice(){
+  getPrice() {
     return `$${formatCurrency(this.priceCents)}`
   }
 
+  extraInfoHTML(){
+    return ''
+  }
 
-}
+
+};
+
+
+
+class Clothing extends Product {
+
+  sizeChartLink;
+
+  constructor(productsDetals) {
+    super(productsDetals);
+    this.sizeChartLink = productsDetals.sizeChartLink;
+  }
+
+
+  extraInfoHTML(){
+    return `
+      <a href="${this.sizeChartLink}" target="_blank">
+         size chart
+      </a>
+    `
+  };
+};
+
+const tshirt = new Clothing({
+  id: "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+  image: "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
+  name: "Adults Plain Cotton T-Shirt - 2 Pack",
+  rating: {
+    stars: 4.5,
+    count: 56
+  },
+  priceCents: 799,
+  keywords: [
+    "tshirts",
+    "apparel",
+    "mens"
+  ],
+  type: "clothing",
+  sizeChartLink: "images/clothing-size-chart.png"
+});
+
+console.log(tshirt)
 
 
 export const products = [
@@ -706,5 +751,9 @@ export const products = [
     ]
   }
 ].map((productsDetals) => {
-  return new product(productsDetals)
+  if (productsDetals.type === 'clothing') {
+    return new Clothing(productsDetals)
+  }
+  return new Product(productsDetals);
+
 });
