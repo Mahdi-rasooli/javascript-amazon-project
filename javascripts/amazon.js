@@ -1,13 +1,17 @@
 /// using module that avoid from naming conflict and order of our code in html doesnt matter
-import { cart , addToCart} from '../data/cart.js'
-import { products } from '../data/products.js';
+import { cart, addToCart } from '../data/cart.js'
+import { products, loadProducts } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 import { calculateCartQuantity } from '../data/cart.js';
 
-let productsHTML = '';
+loadProducts(renderProductsGrid);
 
-products.forEach((product) => {
-  productsHTML += ` <div class="product-container">
+function renderProductsGrid() {
+
+  let productsHTML = '';
+
+  products.forEach((product) => {
+    productsHTML += ` <div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
               src="${product.image}">
@@ -61,52 +65,53 @@ products.forEach((product) => {
           </button>
         </div>
     `;
-});
+  });
 
 
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
+  document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
-const addedMessageTimeouts = {};
-
-
-
-function updateCartQuantity() {
-
-  const cartQuantity = calculateCartQuantity();
-  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-}
+  const addedMessageTimeouts = {};
 
 
 
-function addedMessage(button) {
+  function updateCartQuantity() {
 
-  const addedMessage = button.closest('.product-container').querySelector('.js-added-to-cart');
-
-  addedMessage.classList.add('added-to-cart-visible');
-
-  // adding timeout for message
-  if (addedMessageTimeouts) {
-    clearTimeout(addedMessageTimeouts);
+    const cartQuantity = calculateCartQuantity();
+    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
   }
 
-  const timeoutId = setTimeout(() => {
-    addedMessage.classList.remove('added-to-cart-visible');
-  }, 2000);
-
-  // Save the timeoutId so we can stop it later.
-  addedMessageTimeouts = timeoutId;
-}
 
 
+  function addedMessage(button) {
 
-document.querySelectorAll('.js-add-to-cart').forEach((button) => {
-  button.addEventListener('click', () => {
-    const { productId } = button.dataset;
+    const addedMessage = button.closest('.product-container').querySelector('.js-added-to-cart');
 
-    addToCart(productId);
+    addedMessage.classList.add('added-to-cart-visible');
 
-    updateCartQuantity();
+    // adding timeout for message
+    if (addedMessageTimeouts) {
+      clearTimeout(addedMessageTimeouts);
+    }
 
-    addedMessage(button)
-  })
-});
+    const timeoutId = setTimeout(() => {
+      addedMessage.classList.remove('added-to-cart-visible');
+    }, 2000);
+
+    // Save the timeoutId so we can stop it later.
+    addedMessageTimeouts = timeoutId;
+  }
+
+
+
+  document.querySelectorAll('.js-add-to-cart').forEach((button) => {
+    button.addEventListener('click', () => {
+      const { productId } = button.dataset;
+
+      addToCart(productId);
+
+      updateCartQuantity();
+
+      addedMessage(button)
+    })
+  });
+};
