@@ -23,6 +23,7 @@ class Product {
   name;
   rating;
   priceCents;
+  keywords;
 
 
   constructor(productsDetals) {
@@ -31,6 +32,7 @@ class Product {
     this.name = productsDetals.name;
     this.rating = productsDetals.rating;
     this.priceCents = productsDetals.priceCents;
+    this.keywords = productsDetals.keywords;
   }
 
 

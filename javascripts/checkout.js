@@ -1,11 +1,11 @@
 import { renderCheckoutHeader } from "./checkout/checkoutHeader.js";
 import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { renderPaymentSummary } from "./checkout/paymentSummary.js";
-import { loadProducts, loadProductsFetch } from "../data/products.js";
+import { loadProducts , loadProductsFetch } from "../data/products.js";
 //import '../data/cart-class.js'
 //import '../data/car.js';
 //import '../data/backend-practice.js';
-import { loadCart } from "../data/cart.js";
+import { loadCart , loadCartFetch } from "../data/cart.js";
 
 
 async function loadPage() {
@@ -13,18 +13,21 @@ async function loadPage() {
 
     try {
 
+        await Promise.all([
+            loadProductsFetch(), 
+            loadCartFetch()
+        ])
+
         //throw 'error1'
 
-        await loadProductsFetch();
-
-        const value = await new Promise((resolve , reject) => {
+        /*const value = await new Promise((resolve , reject) => {
             //throw 'error2'
 
             loadCart(() => {
                 //reject('error 3');
                 resolve();
             });
-        });
+        });*/
 
     } catch (error) {
         console.log('error please try it again later', error);

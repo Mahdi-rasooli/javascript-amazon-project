@@ -1,17 +1,16 @@
 
 import { renderOrderSummary } from "../../javascripts/checkout/orderSummary.js";
-import { loadFromStorage , cart } from "../../data/cart.js";
-import { loadProducts  , loadProductsFetch } from "../../data/products.js";
+import { loadFromStorage, cart } from "../../data/cart.js";
+import { loadProducts, loadProductsFetch } from "../../data/products.js";
+import { loadCartFetch } from "../../data/cart.js";
 
 describe('test suite: orderSummary', () => {
 
     const productId1 = '15b6fc6f-327a-4ec4-896f-486349e85a3d';
     const productId2 = 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6';
 
-    beforeAll((done) => {
-        loadProductsFetch().then(() => {
-           done(); 
-        });
+    beforeAll(async () => {
+        await loadProductsFetch();
     });
 
 
@@ -57,7 +56,7 @@ describe('test suite: orderSummary', () => {
 
 
 
-    it('update the delivery option' , () => {
+    it('update the delivery option', () => {
         document.querySelector(`.js-delivery-option-${productId1}-3`).click();
 
         expect(document.querySelector(`.js-delivery-option-input-${productId1}-3`).checked).toEqual(true);
